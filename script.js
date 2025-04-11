@@ -1,53 +1,83 @@
+// Seleccionar los elementos del DOM
 const fileInput = document.getElementById('fileInput');
 const uploadButton = document.getElementById('uploadButton');
 const fileList = document.getElementById('fileList');
+
 const imageInput = document.getElementById('imageInput');
 const uploadImageButton = document.getElementById('uploadImageButton');
 const imageList = document.getElementById('imageList');
 
+// Función para agregar un archivo a la lista
+function addFileToList(file) {
+  const fileItem = document.createElement('div');
+  fileItem.classList.add('file-item');
+
+  const thumbnail = document.createElement('img');
+  thumbnail.classList.add('file-thumbnail');
+  thumbnail.src = 'https://via.placeholder.com/50x50';
+  fileItem.appendChild(thumbnail);
+
+  const fileName = document.createElement('span');
+  fileName.textContent = file.name;
+  fileItem.appendChild(fileName);
+
+  const downloadLink = document.createElement('a');
+  downloadLink.href = URL.createObjectURL(file);
+  downloadLink.download = file.name;
+  downloadLink.textContent = 'Descargar';
+  fileItem.appendChild(downloadLink);
+
+  fileList.appendChild(fileItem);
+}
+
+// Función para agregar una imagen a la lista
+function addImageToList(file) {
+  const imageItem = document.createElement('div');
+  imageItem.classList.add('image-item');
+
+  const thumbnail = document.createElement('img');
+  thumbnail.classList.add('file-thumbnail');
+  thumbnail.src = URL.createObjectURL(file);
+  imageItem.appendChild(thumbnail);
+
+  const fileName = document.createElement('span');
+  fileName.textContent = file.name;
+  imageItem.appendChild(fileName);
+
+  const downloadLink = document.createElement('a');
+  downloadLink.href = URL.createObjectURL(file);
+  downloadLink.download = file.name;
+  downloadLink.textContent = 'Descargar';
+  imageItem.appendChild(downloadLink);
+
+  imageList.appendChild(imageItem);
+}
+
+// Evento de carga de archivos PDF
+fileInput.addEventListener('change', () => {
+  fileList.innerHTML = '';
+  for (const file of fileInput.files) {
+    addFileToList(file);
+  }
+});
+
+// Evento de carga de imágenes
+imageInput.addEventListener('change', () => {
+  imageList.innerHTML = '';
+  for (const file of imageInput.files) {
+    addImageToList(file);
+  }
+});
+
+// Evento de clic en el botón de subir PDFs
 uploadButton.addEventListener('click', () => {
-    const files = fileInput.files;
-    if (files.length > 0) {
-        for (let i = 0; i < files.length; i++) {
-            const file = files[i];
-            if (file.type === 'application/pdf') {
-                const fileItem = document.createElement('div');
-                fileItem.classList.add('file-item');
-
-                // Crear una miniatura del PDF
-                const thumbnail = document.createElement('img');
-                thumbnail.src = 'https://via.placeholder.com/50'; // Placeholder para la miniatura
-                thumbnail.classList.add('file-thumbnail');
-
-                fileItem.innerHTML = `
-                    ${file.name} <a href="${URL.createObjectURL(file)}" download>Descargar</a>
-                `;
-                fileItem.prepend(thumbnail); // Agrega la miniatura al inicio
-                fileList.appendChild(fileItem);
-            } else {
-                alert('Por favor, sube solo archivos PDF.');
-            }
-        }
-        fileInput.value = ''; // Limpiar el input
-    } else {
-        alert('Por favor, sube al menos un archivo PDF.');
-    }
+  // Aquí puedes agregar la lógica para subir los archivos PDF al servidor
+  console.log('Subiendo PDFs...');
 });
 
+// Evento de clic en el botón de subir imágenes
 uploadImageButton.addEventListener('click', () => {
-    const files = imageInput.files;
-    if (files.length > 0) {
-        for (let i = 0; i < files.length; i++) {
-            const file = files[i];
-            const imageItem = document.createElement('div');
-            imageItem.classList.add('image-item');
-            imageItem.innerHTML = `
-                ${file.name} <a href="${URL.createObjectURL(file)}" target="_blank">Ver Imagen</a>
-            `;
-            imageList.appendChild(imageItem);
-        }
-        imageInput.value = ''; // Limpiar el input
-    } else {
-        alert('Por favor, sube al menos una imagen.');
-    }
+  // Aquí puedes agregar la lógica para subir las imágenes al servidor
+  console.log('Subiendo imágenes...');
 });
+
